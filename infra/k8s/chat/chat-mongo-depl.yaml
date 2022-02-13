@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sample-mongo-depl
+  namespace: go-skaffold
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sample-mongo
+  template:
+    metadata:
+      labels:
+        app: sample-mongo
+    spec:
+      containers:
+        - name: sample-mongo
+          image: mongo
+          resources:
+            limits:
+              memory: "200Mi"
+              cpu: "100m"
+            requests:
+              memory: "100Mi"
+              cpu: "50m"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: sample-mongo-svc
+  namespace: go-skaffold
+spec:
+  selector:
+    app: sample-mongo
+  ports:
+    - name: db
+      protocol: TCP
+      port: 27017
+      targetPort: 27017

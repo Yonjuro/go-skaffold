@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sample-depl
+  namespace: go-skaffold
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sample
+  template:
+    metadata:
+      labels:
+        app: sample
+    spec:
+      containers:
+      - name: sample
+        image: yonjuro/go-skaffold
+        env:
+          - name: MONGO_URI
+            value: 'mongodb://sample-mongo-svc:27017'
+          - name: MONGO_DB
+            value: 'sample'
+        #   - name: JWT_KEY
+        #     valueFrom:
+        #         secretKeyRef:
+        #           name: jwt-secret
+        #           key: JWT_KEY
+        resources:
+          limits:
+            memory: "200Mi"
+            cpu: "100m"
+          requests:
+            memory: "100Mi"
+            cpu: "50m"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: sample-svc
+  namespace: go-skaffold
+spec:
+  selector:
+    app: sample
+  ports:
+  - name: sample
+    protocol: TCP
+    port: 5000
+    targetPort: 5000

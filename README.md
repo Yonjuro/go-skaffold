@@ -18,6 +18,9 @@ right context if you have any kind of production context set up in your **kubect
 
 # Build and run in dev mode
 skaffold dev
+
+# Try to access the ping API
+curl -s http://localhost/go-skaffold/ping | jq 
 ```
 
 
